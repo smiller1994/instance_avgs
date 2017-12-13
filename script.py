@@ -20,21 +20,22 @@ def eval_instance(instance_name):
     a=[]
     for adict in data:
         if adict.get('type') == instance_name:
+            instance_name_test = instance_name
             times = {k: v for k, v in adict.items() if k == "start_dttm" or k == "delete_dttm"}
             g =[datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f") for date in times.values()]
             g =g[0]-g[1]
             #pair=(adict.get('type'),g)
             a.append(g)
-    converter(a)
+    converter(a, instance_name_test)
 
-def converter(a):
+def converter(a, instance_name_test):
     count = 0
     for t in a:
         seconds=float(t.total_seconds())
         mins=round(seconds/60,3)
         count+=mins
     avg=round(count/len(a),2)
-    print(avg)
+    print('The average time for a '+ instance_name_test+' instance: '+str(avg))
 
 def main():
     table_name = "instance_avgs"
