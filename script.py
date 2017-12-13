@@ -10,25 +10,28 @@ dynamo=boto3.resource("dynamodb", region_name="us-east-2")
 table = dynamo.Table("dynamite-dev")
 response = table.scan()
 data = response['Items']
+masterlist=[]
 
 def add_instance_type(name):
     if name not in instances:
         instances.append(name)
+
         #eval_instance(name)
 
-a = list()
-counter = 0
+
 def eval_instance(instance_name):
     for adict in data:
         if adict.get('type') == instance_name:
             inst_count=0.0
             times = {k: v for k, v in adict.items() if k == "start_dttm" or k == "delete_dttm"}
-            g = [datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f") for date in times.values()]
-            print(g)
-    a = a[counter]
-    counter +=1
-    a.append((g[0]-g[1]))
-    print(a)
+            g =[datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f") for date in times.values()]
+            g =g[0]-g[1]
+            a=[]
+            a.append(g)
+            a.append(adict.get('type'))
+            print(a)
+            #masterlist.append()
+    #print(masterlist)
 
 def main():
     table_name = "instance_avgs"
