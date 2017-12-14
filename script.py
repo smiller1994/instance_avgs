@@ -4,7 +4,6 @@ global instances
 from collections import defaultdict
 
 instances = []
-defdict=defaultdict(list)
 
 dynamo=boto3.resource("dynamodb", region_name="us-east-2")
 table = dynamo.Table("dynamite-dev")
@@ -12,7 +11,6 @@ response = table.scan()
 data = response['Items']
 table_name = "instance_avgs"
 table_out=dynamo.Table(table_name)
-
 
 def add_instance_type(name):
     if name not in instances:
@@ -39,12 +37,16 @@ def converter(a, instance_name_test,inst_count):
         count+=mins
     avg=round(count/len(a),2)
     str_avg= str(avg)
+    inst_count = str(inst_count)
+    update_dttm = str(datetime.now())
     table_out.put_item(
         Item={
             'Instance_Type': instance_name_test,
+            'Instance_Count':inst_count,
             'Average_Time': str_avg,
+            'Update_Dttm': update_dttm,
         })
-    print('The average time for '+str(inst_count)+' counts of a '+ instance_name_test+' instance: '+str_avg)
+    print('The average time for ' + inst_count + ' counts of a ' + instance_name_test + ' instance: ' + str_avg)
 
 def main():
     for adict in data:
