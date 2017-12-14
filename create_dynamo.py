@@ -11,6 +11,10 @@ def main():
         {
             'AttributeName':'Average_Time',
             'KeyType':'RANGE'
+        },
+        {
+            'AttributeName':'Update_dttm',
+            'KeyType':'RANGE'
         }
     ],
     AttributeDefinitions=[
@@ -20,11 +24,15 @@ def main():
         {
             'AttributeName':'Average_Time',
             'AttributeType':'S'
+        }
+        {
+            'AttributeName':'Update_dttm',
+            'AttributeType':'S'
         },],
      ProvisionedThroughput={
          'ReadCapacityUnits':20,
          'WriteCapacityUnits':20,
-     }       
+     }
    )
 if __name__ == '__main__':
 	main()
