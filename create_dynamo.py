@@ -8,30 +8,18 @@ def main():
             'AttributeName':'Instance_Type',
             'KeyType':'HASH'
         },
-        {
-            'AttributeName':'Average_Time',
-            'KeyType':'RANGE'
-        },
-        {
-            'AttributeName':'Update_dttm',
-            'KeyType':'RANGE'
-        }
+        
+
     ],
     AttributeDefinitions=[
         {
             'AttributeName':'Instance_Type',
             'AttributeType': 'S'},
-        {
-            'AttributeName':'Average_Time',
-            'AttributeType':'S'
-        }
-        {
-            'AttributeName':'Update_dttm',
-            'AttributeType':'S'
-        },],
+
+        ],
      ProvisionedThroughput={
          'ReadCapacityUnits':20,
-         'WriteCapacityUnits':20,
+         'WriteCapacityUnits':100,
      }
    )
 if __name__ == '__main__':
