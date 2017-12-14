@@ -12,7 +12,7 @@ response = table.scan()
 data = response['Items']
 table_name = "instance_avgs"
 table_out=dynamo.Table(table_name)
-count = 0
+
 
 def add_instance_type(name):
     if name not in instances:
@@ -20,16 +20,18 @@ def add_instance_type(name):
 
 def eval_instance(instance_name):
     a=[]
+    inst_count=0
     for adict in data:
         if adict.get('type') == instance_name:
+            inst_count+=1
             instance_name_test = instance_name
             times = {k: v for k, v in adict.items() if k == "start_dttm" or k == "delete_dttm"}
             g =[datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f") for date in times.values()]
             g =g[0]-g[1]
             a.append(g)
-    converter(a, instance_name_test)
+    converter(a, instance_name_test,inst_count)
 
-def converter(a, instance_name_test):
+def converter(a, instance_name_test,inst_count):
     count = 0
     for t in a:
         seconds=float(t.total_seconds())
@@ -42,7 +44,7 @@ def converter(a, instance_name_test):
             'Instance_Type': instance_name_test,
             'Average_Time': str_avg,
         })
-    print('The average time for a '+ instance_name_test+' instance: '+str_avg)
+    print('The average time for '+str(inst_count)+' counts of a '+ instance_name_test+' instance: '+str_avg)
 
 def main():
     for adict in data:
@@ -50,6 +52,6 @@ def main():
     for instance_name in instances:
         eval_instance(instance_name)
 
-    
+
 if __name__ == "__main__":
     main()
